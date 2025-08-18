@@ -2,4 +2,4 @@ const express = require("express");
 const app = express()
 const PORT = 3333;
 
-app.listen(prompt, () => console.log("サーバーが起動しました"))
+app.listen(PORT, () => console.log("サーバーが起動しました"))
