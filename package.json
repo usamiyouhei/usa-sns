@@ -1,0 +1,17 @@
+{
+  "name": "usa-sns",
+  "version": "1.0.0",
+  "description": "usa-sns",
+  "license": "ISC",
+  "author": "usa-code",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "helmet": "^8.1.0",
+    "mongoose": "^8.17.1",
+    "nodemon": "^3.1.10"
+  }
+}
