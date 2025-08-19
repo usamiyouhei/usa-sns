@@ -48,3 +48,5 @@ const UserSchema = new mongoose.Schema({
 
 { timestamp: true}
 );
+
+module.exports = mongoose.model("User", UserSchema)
