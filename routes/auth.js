@@ -28,7 +28,12 @@
 
 // routes/auth.js
 const router = require("express").Router();
-const User = require("../models/User"); // パスは環境に合わせて
+// const User = require("../models/User"); // パスは環境に合わせて
+const user = await User.findOneAndUpdate(
+  { username },                           // 同じ username を探す
+  { $setOnInsert: { email, password } },  // 無いときだけ作る
+  { upsert: true, new: true }
+);
 
 const asyncHandler = fn => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);

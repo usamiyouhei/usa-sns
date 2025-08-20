@@ -4,21 +4,21 @@ const UserSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    min:3,
-    max: 25,
+    minlength:3,
+    maxlength: 25,
     unique: true
   },
   email: {
     type: String,
     required: true,
-    max: 50,
+    maxlength: 50,
     unique: true,
   },
   password: {
     type: String,
     required: true,
-    min: 6,
-    max: 50,
+    minlength: 6,
+    maxlength: 50,
   },
   profilePicture: {
     type: String,
@@ -38,11 +38,11 @@ const UserSchema = new mongoose.Schema({
   },
   desc: {
     type: String,
-    max: 70,
+    maxlength: 70,
   },
   city: {
     type: String,
-    max: 50,
+    maxlength: 50,
   }
 },
 
