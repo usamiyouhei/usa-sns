@@ -27,37 +27,50 @@
 // module.exports = router;
 
 // routes/auth.js
+ // user register
 const router = require("express").Router();
-// const User = require("../models/User"); // パスは環境に合わせて
-const user = await User.findOneAndUpdate(
-  { username },                           // 同じ username を探す
-  { $setOnInsert: { email, password } },  // 無いときだけ作る
-  { upsert: true, new: true }
-);
+const User = require("../models/User");
 
 const asyncHandler = fn => (req, res, next) =>
   Promise.resolve(fn(req, res, next)).catch(next);
 
 router.post("/register", asyncHandler(async (req, res) => {
-  // 受け取り確認（400で返す）
   const { username, email, password } = req.body;
-  if (!username || !email || !password)
+  if (!username || !email || !password) {
     return res.status(400).json({ error: "username, email, password are required" });
+  }
 
-  // そのまま渡す（まずは動作確認用）
-  const user = await User.create({ username, email, password });
-  res.status(201).json({ id: user._id, username: user.username, email: user.email });
+  // 事前チェック（どちらが衝突かを返す）
+  const existing = await User.findOne({ $or: [{ username }, { email }] }).lean();
+  if (existing) {
+    const field = existing.username === username ? "username" : "email";
+    return res.status(409).json({ error: "Conflict", field, message: `${field} already in use` });
+  }
+
+  const createdUser = await User.create({ username, email, password });
+  return res.status(201).json({
+    id: createdUser._id,
+    username: createdUser.username,
+    email: createdUser.email
+  });
 }));
-// router.post("/register", asyncHandler(async (req, res) => {
-//   const { username, email, password } = req.body;
 
-//   const user = await User.create({ username, email, password });
+// login
+router.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.body.email});
+    if(!user) return res.status(404).send("ユーザーが見つかりません。");
 
-//   // そのまま返すと password も含まれてしまうので除外する
-//   const { password: _, ...userWithoutPassword } = user.toObject();
+    const vailedPassword = req.body.password === user.password;
+    if(!vailedPassword) return res.status(400).json("パスワードが違います。")
 
-//   res.status(201).json(userWithoutPassword);
-// }));
+      return res.status(200).json(user);
+  } catch (err) {
+    return res.status.json(err)
+  }
+})
+
+
 
 module.exports = router;
 
