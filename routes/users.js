@@ -76,6 +76,44 @@ router.put("/:id/follow", async (req, res) => {
   }
 })
 
+// const { Types } = require("mongoose");
+
+// // PUT /api/users/:id/follow   ← :id は「フォローされる側」
+// router.put("/:id/follow", async (req, res) => {
+//   try {
+//     const targetId = req.params.id;   // フォローされる側
+//     const currentId = req.body.userId; // フォローする側（自分）
+
+//     if (!currentId) return res.status(400).json("userId が必要です。");
+//     if (String(targetId) === String(currentId)) {
+//       return res.status(400).json("自分自身をフォローできません。");
+//     }
+
+//     // ユーザー存在確認
+//     const [target, current] = await Promise.all([
+//       User.findById(targetId).lean(),
+//       User.findById(currentId).lean(),
+//     ]);
+//     if (!target || !current) return res.status(404).json("ユーザーが見つかりません。");
+
+//     // 追加（重複は自動スキップ）し、変更があったかで判定
+//     const [r1, r2] = await Promise.all([
+//       User.updateOne({ _id: targetId },  { $addToSet: { followers: currentId } }),
+//       User.updateOne({ _id: currentId }, { $addToSet: { followings: targetId } }),
+//     ]);
+
+//     const added = (r1.modifiedCount > 0) && (r2.modifiedCount > 0);
+//     if (!added) {
+//       return res.status(409).json("あなたはすでにこのユーザーをフォローしています。");
+//     }
+
+//     return res.status(200).json("フォローに成功しました！");
+//   } catch (err) {
+//     console.error(err);
+//     return res.status(500).json({ error: "ServerError", message: err.message });
+//   }
+// });
+
 // router.get("/", (req, res) => {
 //   res.send("users router")
 // })
