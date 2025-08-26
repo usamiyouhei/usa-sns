@@ -30,16 +30,14 @@ router.put("/:id", async(req,res) => {
 })
 
 // post delete
-router.put("/:id", async(req,res) => {
+router.delete("/:id", async(req,res) => {
   try {
     const post = await Post.findById(req.params.id);
     if(post.userId === req.body.userId) {
-      await post.updateOne({
-        $set: req.body,
-      });
-      return res.status(200).json("投稿編集に成功しました！")
+      await post.deleteOne();
+      return res.status(200).json("投稿削除に成功しました！")
     } else {
-      return res.status(403).json("あなたは他の人の投稿を編集できません")
+      return res.status(403).json("あなたは他の人の投稿を削除できません")
     }
   } catch (err) {
     return res.status(403).json(err)
