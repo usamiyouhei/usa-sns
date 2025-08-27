@@ -75,6 +75,7 @@ router.put("/:id/follow", async (req, res) => {
     return res.status.json("自分自身をフォローできません。")
   }
 })
+
 // User unfollow
 router.put("/:id/unfollow", async (req, res) => {
   if(req.body.userId !== req.params.id) {
